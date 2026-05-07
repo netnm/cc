@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Weather App</title>
+
+  <style>
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial;
+      background: whitesmoke;
+    }
+
+    .container {
+      width: 400px;
+      margin: 80px auto;
+    }
+
+    .card {
+      background: white;
+      padding: 25px;
+      border-radius: 10px;
+      border: 1px solid lightgray;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 15px;
+      border: 1px solid gray;
+      border-radius: 5px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background: royalblue;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    h2 {
+      margin-top: 20px;
+      margin-bottom: 10px;
+    }
+
+    p {
+      margin-bottom: 10px;
+      font-size: 18px;
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <div class="card">
+
+      <h1>Weather Forecast App</h1>
+
+      <input
+        type="text"
+        id="city"
+        placeholder="Enter city name">
+
+      <button onclick="getWeather()">
+        Get Weather
+      </button>
+
+      <h2 id="cityName">
+        City Name
+      </h2>
+
+      <p id="temperature">
+        Temperature: --
+      </p>
+
+      <p id="windspeed">
+        Wind Speed: --
+      </p>
+
+    </div>
+
+  </div>
+
+  <script>
+
+    async function getWeather() {
+
+      // Get city name
+      let city = document.getElementById("city").value;
+
+      // API URL
+      let url =
+        "https://wttr.in/" + city + "?format=j1";
+
+      // Call API
+      let response = await fetch(url);
+
+      // Convert response into JSON
+      let data = await response.json();
+
+      // Display data
+      document.getElementById("cityName").innerHTML =
+        "City: " + city;
+
+      document.getElementById("temperature").innerHTML =
+        "Temperature: " +
+        data.current_condition[0].temp_C +
+        " °C";
+
+      document.getElementById("windspeed").innerHTML =
+        "Wind Speed: " +
+        data.current_condition[0].windspeedKmph +
+        " km/h";
+    }
+
+  </script>
+
+</body>
+</html>
+
+
+<!-- git config --global user.name "netnm"
+git config --global user.email "your-new-email@example.com" -->
+
+app.py
+from flask import Flask, render_template
+
+app = Flask(__name__)
+
+@app.route("/")
+def home():
+    return render_template("index.html")
+
+if __name__ == "__main__":
+    app.run()
+
+
+req.txt
+flask
+gunicorn

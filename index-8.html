@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Currency Converter</title>
+
+  <style>
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial;
+      background: whitesmoke;
+      color: black;
+    }
+
+    .container {
+      width: 700px;
+      margin: 40px auto;
+    }
+
+    .topbar {
+      margin-bottom: 25px;
+    }
+
+    .eyebrow {
+      color: royalblue;
+      font-size: 14px;
+      margin-bottom: 5px;
+    }
+
+    .subtitle {
+      color: gray;
+      margin-top: 5px;
+    }
+
+    .card {
+      background: white;
+      border: 1px solid lightgray;
+      border-radius: 12px;
+      padding: 25px;
+    }
+
+    .input-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+    }
+
+    input,
+    select {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid gray;
+      border-radius: 6px;
+      font-size: 16px;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      background: royalblue;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      margin-top: 10px;
+    }
+
+    #result {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    /* Bottom Cards */
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-top: 25px;
+    }
+
+    .info-card {
+      background: white;
+      border: 1px solid lightgray;
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .info-card h3 {
+      margin-bottom: 10px;
+    }
+
+    .info-card p {
+      color: dimgray;
+      line-height: 1.5;
+    }
+
+    /* Responsive */
+
+    @media (max-width: 750px) {
+
+      .container {
+        width: 95%;
+      }
+
+      .info-grid {
+        grid-template-columns: 1fr;
+      }
+
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <!-- Header -->
+
+    <div class="topbar">
+
+      <p class="eyebrow">
+        Live Currency Exchange
+      </p>
+
+      <h1>
+        Currency Converter Application
+      </h1>
+
+      <p class="subtitle">
+        Convert one currency into another using real-time exchange rates.
+      </p>
+
+    </div>
+
+    <!-- Converter Card -->
+
+    <div class="card">
+
+      <div class="input-group">
+
+        <label>Enter Amount</label>
+
+        <input
+          type="number"
+          id="amount"
+          placeholder="Enter amount">
+
+      </div>
+
+      <div class="input-group">
+
+        <label>From Currency</label>
+
+        <select id="fromCurrency">
+
+          <option value="USD">USD</option>
+          <option value="INR">INR</option>
+          <option value="EUR">EUR</option>
+          <option value="GBP">GBP</option>
+
+        </select>
+
+      </div>
+
+      <div class="input-group">
+
+        <label>To Currency</label>
+
+        <select id="toCurrency">
+
+          <option value="INR">INR</option>
+          <option value="USD">USD</option>
+          <option value="EUR">EUR</option>
+          <option value="GBP">GBP</option>
+
+        </select>
+
+      </div>
+
+      <button onclick="convertCurrency()">
+        Convert Currency
+      </button>
+
+      <h2 id="result">
+        Converted Amount: --
+      </h2>
+
+    </div>
+
+    <!-- Bottom Cards -->
+
+    <div class="info-grid">
+
+      <div class="info-card">
+
+        <h3>About Project</h3>
+
+        <p>
+          This application converts currencies using live exchange rates from an online API.
+        </p>
+
+      </div>
+
+      <div class="info-card">
+
+        <h3>Technology Used</h3>
+
+        <p>
+          HTML creates structure, CSS designs the interface, JavaScript handles logic and Flask deploys the application.
+        </p>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+
+    async function convertCurrency() {
+
+      // Get amount
+      let amount =
+        document.getElementById("amount").value;
+
+      // Get currencies
+      let fromCurrency =
+        document.getElementById("fromCurrency").value;
+
+      let toCurrency =
+        document.getElementById("toCurrency").value;
+
+      // API URL
+      let url =
+        "https://api.exchangerate.host/convert?from=" +
+        fromCurrency +
+        "&to=" +
+        toCurrency +
+        "&amount=" +
+        amount;
+
+      // Call API
+      let response = await fetch(url);
+
+      // Convert response into JSON
+      let data = await response.json();
+
+      // Display converted amount
+      document.getElementById("result").innerHTML =
+        "Converted Amount: " +
+        data.result.toFixed(2) +
+        " " +
+        toCurrency;
+    }
+
+  </script>
+
+</body>
+
+</html>
+
+
+from flask import Flask, render_template
+
+app = Flask(__name__)
+
+@app.route("/")
+def home():
+    return render_template("index.html")
+
+if __name__ == "__main__":
+    app.run()
+
+
+Flask
+gunicorn
